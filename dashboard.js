@@ -27,10 +27,10 @@ const teacherUploadSection = document.getElementById("teacher-upload-section");
 const studentViewMsg = document.getElementById("student-view-msg");
 const uploadBtn = document.getElementById("upload-btn");
 const anyFileUploader = document.getElementById("any-file-uploader");
-const fileList = document.getElementById("file-list");
+const fileCategorySelect = document.getElementById("file-category-select");
 const uploadStatus = document.getElementById("upload-status");
 
-// عناصر الحصص المباشرة لـ Google Meet
+// عناصر الحصص المباشرة
 const teacherLiveControl = document.getElementById("teacher-live-control");
 const liveTitleInput = document.getElementById("live-title-input");
 const meetUrlInput = document.getElementById("meet-url-input");
@@ -42,15 +42,12 @@ const activeLiveBox = document.getElementById("active-live-box");
 const currentLiveTitle = document.getElementById("current-live-title");
 const joinLiveBtn = document.getElementById("join-live-btn");
 
-// مراقبة حالة البث المباشر لحظياً في السحابة
+// مراقبة حالة البث المباشر
 function listenToLiveStatus() {
   onSnapshot(doc(db, "live_stream", "current_session"), (snapshot) => {
     if (snapshot.exists()) {
       const data = snapshot.data();
-
-      if (meetUrlInput) {
-        meetUrlInput.value = data.url || DEFAULT_MEET_URL;
-      }
+      if (meetUrlInput) meetUrlInput.value = data.url || DEFAULT_MEET_URL;
 
       if (data.isLive) {
         if (noLiveMsg) noLiveMsg.style.display = "none";
@@ -78,7 +75,7 @@ function listenToLiveStatus() {
   });
 }
 
-// بدء الحصة المباشرة بالرابط الثابت
+// بدء الحصة
 if (startLiveBtn) {
   startLiveBtn.addEventListener("click", async () => {
     const title = (liveTitleInput && liveTitleInput.value.trim()) ? liveTitleInput.value.trim() : "حصة مباشرة مع الأستاذة";
@@ -91,23 +88,17 @@ if (startLiveBtn) {
         url: meetUrl,
         startedAt: new Date()
       });
-
       if (liveStatusMsg) {
         liveStatusMsg.style.color = "green";
         liveStatusMsg.textContent = "تم إطلاق الحصة المباشرة بنجاح! 🔴";
       }
-
     } catch (err) {
       console.error("خطأ في بدء الحصة:", err);
-      if (liveStatusMsg) {
-        liveStatusMsg.style.color = "red";
-        liveStatusMsg.textContent = "فشل بدء الحصة!";
-      }
     }
   });
 }
 
-// إنهاء الحصة المباشرة مع الحفاظ على الرابط دائمًا
+// إنهاء الحصة
 if (stopLiveBtn) {
   stopLiveBtn.addEventListener("click", async () => {
     try {
@@ -119,7 +110,6 @@ if (stopLiveBtn) {
         title: currentTitle,
         url: currentUrl
       });
-
       if (liveStatusMsg) {
         liveStatusMsg.style.color = "orange";
         liveStatusMsg.textContent = "تم إنهاء الحصة المباشرة. ⬛";
@@ -130,47 +120,54 @@ if (stopLiveBtn) {
   });
 }
 
-// جلب وعرض كل الملفات مع زرين منفصلين (عرض + تحميل)
+// جلب وعرض الملفات
 async function loadFiles(isTeacher) {
-  if (!fileList) return;
-  fileList.innerHTML = "<p style='color: #666; text-align: center;'>جاري تحميل الملفات من السحابة...</p>";
+  const categories = ["lessons", "term1", "term2", "term3", "exams", "tests"];
   
+  categories.forEach(cat => {
+    const listEl = document.getElementById(`list-${cat}`);
+    if (listEl) listEl.innerHTML = "<p style='color: #888; font-size:13px; margin:5px 0;'>جاري التحميل...</p>";
+  });
+
   try {
     const querySnapshot = await getDocs(collection(db, "all_files"));
-    fileList.innerHTML = "";
     
-    if (querySnapshot.empty) {
-      fileList.innerHTML = "<p style='color: #666; text-align: center;'>لا توجد ملفات مرفوعة حالياً.</p>";
-      return;
-    }
+    categories.forEach(cat => {
+      const listEl = document.getElementById(`list-${cat}`);
+      if (listEl) listEl.innerHTML = "";
+    });
 
     querySnapshot.forEach((docSnap) => {
       const fileData = docSnap.data();
       const docId = docSnap.id;
+      const category = fileData.category || "lessons";
+
+      const listEl = document.getElementById(`list-${category}`);
+      if (!listEl) return;
 
       const li = document.createElement("li");
       li.className = "file-item";
       
       let actionsHTML = `
-        <a href="${fileData.url}" target="_blank" class="view-link" style="background:#008CBA; color:white; text-decoration:none; padding:6px 12px; border-radius:4px; font-size:14px; margin-left:5px;">عرض 👁️</a>
-        <a href="${fileData.url}" download="${fileData.name}" class="download-link" style="background:#4CAF50; color:white; text-decoration:none; padding:6px 12px; border-radius:4px; font-size:14px;">تحميل 📥</a>
+        <a href="${fileData.url}" target="_blank" style="background:#008CBA; color:white; text-decoration:none; padding:5px 10px; border-radius:4px; font-size:13px;">عرض 👁️</a>
+        <a href="${fileData.url}" download="${fileData.name}" style="background:#4CAF50; color:white; text-decoration:none; padding:5px 10px; border-radius:4px; font-size:13px;">تحميل 📥</a>
       `;
       
       if (isTeacher) {
         actionsHTML += `
-          <div class="delete-container" style="display:inline-block; position:relative; margin-right: 8px;">
-            <button class="delete-btn" style="background:#f44336; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size:14px;">حذف 🗑️</button>
-            <div class="confirm-box" style="display:none; position:absolute; right:0; top:110%; background:white; border:1px solid #ddd; padding:8px; border-radius:5px; box-shadow:0 2px 5px rgba(0,0,0,0.2); z-index:10; white-space:nowrap;">
-              <span style="font-size:12px; margin-left:5px; color:#333;">متأكد؟</span>
-              <button class="yes-btn" style="background:#f44336; color:white; border:none; padding:3px 8px; border-radius:3px; cursor:pointer; font-size:12px;">نعم</button>
-              <button class="no-btn" style="background:#ccc; color:black; border:none; padding:3px 8px; border-radius:3px; cursor:pointer; font-size:12px; margin-right:3px;">لا</button>
+          <div class="delete-container" style="display:inline-block; position:relative;">
+            <button class="delete-btn" style="background:#f44336; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; font-size:13px;">حذف 🗑️</button>
+            <div class="confirm-box" style="display:none; position:absolute; left:0; bottom:110%; background:white; border:1px solid #ddd; padding:6px 10px; border-radius:6px; box-shadow:0 4px 12px rgba(0,0,0,0.15); z-index:100; white-space:nowrap;">
+              <span style="font-size:12px; margin-left:5px; color:#333; font-weight:bold;">متأكد؟</span>
+              <button class="yes-btn" style="background:#f44336; color:white; border:none; padding:3px 8px; border-radius:4px; cursor:pointer; font-size:12px;">نعم</button>
+              <button class="no-btn" style="background:#ccc; color:black; border:none; padding:3px 8px; border-radius:4px; cursor:pointer; font-size:12px; margin-right:3px;">لا</button>
             </div>
           </div>
         `;
       }
 
       li.innerHTML = `
-        <span>📁 <strong>${fileData.name}</strong></span>
+        <span style="font-size: 14px;">📁 <strong>${fileData.name}</strong></span>
         <div class="file-actions">${actionsHTML}</div>
       `;
 
@@ -203,15 +200,22 @@ async function loadFiles(isTeacher) {
         });
       }
 
-      fileList.appendChild(li);
+      listEl.appendChild(li);
     });
+
+    categories.forEach(cat => {
+      const listEl = document.getElementById(`list-${cat}`);
+      if (listEl && listEl.children.length === 0) {
+        listEl.innerHTML = "<p style='color: #888; font-size: 13px; margin: 5px 0;'>لا توجد ملفات في هذا القسم حالياً.</p>";
+      }
+    });
+
   } catch (error) {
-    console.error("تفاصيل خطأ جلب الملفات:", error);
-    fileList.innerHTML = `<p style='color: red; text-align: center;'>خطأ في الاتصال بقاعدة البيانات السحابية.</p>`;
+    console.error("خطأ في جلب الملفات:", error);
   }
 }
 
-// مراقبة حساب المستخدم والصلاحيات
+// مراقبة المصادقة
 onAuthStateChanged(auth, (user) => {
   if (user) {
     const isTeacher = (user.email === TEACHER_EMAIL);
@@ -257,6 +261,8 @@ if (uploadBtn) {
     }
 
     const file = anyFileUploader.files[0];
+    const category = fileCategorySelect.value;
+
     if (!file) {
       if (uploadStatus) {
         uploadStatus.style.color = "red";
@@ -276,6 +282,7 @@ if (uploadBtn) {
       try {
         await addDoc(collection(db, "all_files"), {
           name: file.name,
+          category: category,
           url: reader.result,
           createdAt: new Date()
         });
@@ -297,13 +304,6 @@ if (uploadBtn) {
           uploadStatus.style.color = "red";
           uploadStatus.textContent = "فشل الحفظ في القاعدة! ❌";
         }
-      }
-    };
-
-    reader.onerror = function () {
-      if (uploadStatus) {
-        uploadStatus.style.color = "red";
-        uploadStatus.textContent = "حدث خطأ أثناء قراءة الملف! ❌";
       }
     };
   });

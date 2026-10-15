@@ -17,7 +17,6 @@
       color: #2a0845;
       min-height: 100vh;
     }
-    /* الهيدر العلوي */
     .header {
       background: linear-gradient(135deg, #2a0845, #51186a);
       color: white;
@@ -47,13 +46,11 @@
       background: #e53935;
       border-color: #e53935;
     }
-    /* حاوية المحتوى */
     .container {
       max-width: 1000px;
       margin: 25px auto;
       padding: 0 15px;
     }
-    /* شريط التبويبات الرئيسي */
     .tabs-nav {
       display: flex;
       gap: 12px;
@@ -85,7 +82,6 @@
       border-color: #4a148c;
       box-shadow: 0 8px 20px rgba(74, 20, 140, 0.3);
     }
-    /* الأقسام المخفية والظاهرة */
     .tab-content {
       display: none;
       background: white;
@@ -110,8 +106,7 @@
       padding-bottom: 10px;
       display: inline-block;
     }
-    /* الإدخالات والأزرار */
-    input[type="text"] {
+    input[type="text"], select {
       width: 100%;
       padding: 12px;
       border: 2px solid #e1bee7;
@@ -121,7 +116,7 @@
       background: #faf5fc;
       transition: border-color 0.3s;
     }
-    input[type="text"]:focus {
+    input[type="text"]:focus, select:focus {
       border-color: #8e24aa;
       background: #fff;
     }
@@ -139,7 +134,6 @@
     .card-btn:hover {
       opacity: 0.9;
     }
-    /* البث المباشر */
     .live-status-box {
       padding: 20px;
       border-radius: 12px;
@@ -151,20 +145,54 @@
       background: #e8f5e9;
       border-color: #a5d6a7;
     }
-    /* قائمة الملفات */
+
+    /* أزرار الأكورديون المنسدلة */
+    .accordion-item {
+      margin-top: 15px;
+      border: 1px solid #e8d5f2;
+      border-radius: 12px;
+      background: #fcf9fd;
+    }
+    .accordion-header {
+      width: 100%;
+      background: #f0e6f5;
+      color: #4a148c;
+      padding: 15px 20px;
+      font-size: 16px;
+      font-weight: 800;
+      border: none;
+      border-radius: 12px;
+      text-align: right;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+    .accordion-header:hover {
+      background: #e1bee7;
+    }
+    .accordion-content {
+      display: none;
+      padding: 15px 20px;
+      background: white;
+      border-top: 1px solid #e8d5f2;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+    }
     .file-list {
       list-style: none;
       padding: 0;
-      margin-top: 20px;
+      margin: 0;
     }
     .file-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: #faf5fc;
-      padding: 15px 20px;
-      margin-bottom: 12px;
-      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      border-radius: 8px;
       border: 1px solid #f0e6f5;
       flex-wrap: wrap;
       gap: 10px;
@@ -172,6 +200,7 @@
     .file-actions {
       display: flex;
       gap: 8px;
+      align-items: center;
     }
   </style>
 </head>
@@ -183,18 +212,16 @@
   </div>
 
   <div class="container">
-    <!-- أزرار التبويبات الرئسية -->
     <div class="tabs-nav">
       <button class="tab-nav-btn active" onclick="showTab('live-section')">🎥 الحصص المباشرة</button>
       <button class="tab-nav-btn" onclick="showTab('lessons-section')">📚 مكتبة الدروس والملفات</button>
       <button class="tab-nav-btn" onclick="showTab('challenges-section')">🎮 الألعاب والتحديات</button>
     </div>
 
-    <!-- 1️⃣ تبويب الحصص المباشرة -->
+    <!-- 1️⃣ الحصص المباشرة -->
     <div id="live-section" class="tab-content active" style="border-top: 5px solid #8e24aa;">
       <h2>🎥 قسم الحصص المباشرة (Google Meet)</h2>
 
-      <!-- تحكم الأستاذة -->
       <div id="teacher-live-control" style="display: none; margin-top: 15px;">
         <p style="color: #6a1b9a; font-weight: 700;">[لوحة الأستاذة: الرابط مثبت تلقائياً، يمكنك تعديل عنوان الحصة فقط عند الحاجة]</p>
         <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px;">
@@ -209,7 +236,6 @@
         <hr style="margin: 20px 0; border: 0; border-top: 1px solid #e1bee7;">
       </div>
 
-      <!-- عرض حالة الحصة للتلاميذ والأستاذة -->
       <div id="live-display-area">
         <div id="no-live-msg" class="live-status-box" style="text-align: center; color: #4a148c;">
           لا توجد أي حصة مباشرة شغالة في الوقت الحالي. 📡
@@ -223,46 +249,122 @@
       </div>
     </div>
 
-    <!-- 2️⃣ تبويب الدروس والملفات -->
+    <!-- 2️⃣ مكتبة الدروس والملفات -->
     <div id="lessons-section" class="tab-content" style="border-top: 5px solid #4a148c;">
       <h2>📚 مكتبة الدروس والملفات التعليمية</h2>
       
-      <div id="teacher-upload-section" style="display: none; margin-top: 15px;">
-        <p style="color: #2e7d32; font-weight: bold;">[لوحة الأستاذة: اختر أي ملف واضغط رفع ليظهر للجميع]</p>
-        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-          <input type="file" id="any-file-uploader" style="padding: 8px;" />
-          <button id="upload-btn" class="card-btn" style="background: #2e7d32;">رفع الملف للمنصة 📤</button>
+      <div id="teacher-upload-section" style="display: none; margin-top: 15px; margin-bottom: 25px; background: #faf5fc; padding: 20px; border-radius: 14px; border: 1px solid #e8d5f2;">
+        <p style="color: #2e7d32; font-weight: bold; margin-top:0;">[لوحة الأستاذة: اختر تصنيف الملف ثم ارفعه]</p>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <select id="file-category-select">
+            <option value="lessons">📖 الدروس والشروحات</option>
+            <option value="term1">📂 الفصل الأول</option>
+            <option value="term2">📂 الفصل الثاني</option>
+            <option value="term3">📂 الفصل الثالث</option>
+            <option value="exams">📝 الفروض</option>
+            <option value="tests">🏆 الاختبارات</option>
+          </select>
+          <input type="file" id="any-file-uploader" style="padding: 8px; background: white; border-radius: 8px; border: 1px solid #e1bee7;" />
+          <button id="upload-btn" class="card-btn" style="background: #2e7d32;">رفع الملف إلى التصنيف المختار 📤</button>
           <span id="upload-status" style="font-weight: bold; color: #6a1b9a;"></span>
         </div>
-        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #e1bee7;">
       </div>
 
-      <div id="student-view-msg" style="display: none;">
-        <p style="color: #666;">يمكنك الاطلاع على الملفات المضافة من طرف الأستاذة وتحميلها مباشرة:</p>
+      <div id="student-view-msg" style="display: none; margin-top: 15px;">
+        <p style="color: #666;">اضغط على القسم للعرّض والاطلاع على الملفات المندرجة تحته:</p>
       </div>
 
-      <h3 style="color: #4a148c; margin-top: 20px;">📋 الملفات المتاحة:</h3>
-      <ul id="file-list" class="file-list">
-        <!-- الملفات تجلب هنا -->
-      </ul>
+      <!-- القوائم المنسدلة -->
+      <div class="accordion-item">
+        <button class="accordion-header" onclick="toggleAccordion('acc-lessons', this)">
+          <span>📖 الدروس والشروحات</span>
+          <span class="icon">🔽</span>
+        </button>
+        <div id="acc-lessons" class="accordion-content">
+          <ul id="list-lessons" class="file-list"></ul>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-header" onclick="toggleAccordion('acc-term1', this)">
+          <span>📂 الفصل الأول</span>
+          <span class="icon">🔽</span>
+        </button>
+        <div id="acc-term1" class="accordion-content">
+          <ul id="list-term1" class="file-list"></ul>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-header" onclick="toggleAccordion('acc-term2', this)">
+          <span>📂 الفصل الثاني</span>
+          <span class="icon">🔽</span>
+        </button>
+        <div id="acc-term2" class="accordion-content">
+          <ul id="list-term2" class="file-list"></ul>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-header" onclick="toggleAccordion('acc-term3', this)">
+          <span>📂 الفصل الثالث</span>
+          <span class="icon">🔽</span>
+        </button>
+        <div id="acc-term3" class="accordion-content">
+          <ul id="list-term3" class="file-list"></ul>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-header" onclick="toggleAccordion('acc-exams', this)">
+          <span>📝 الفروض</span>
+          <span class="icon">🔽</span>
+        </button>
+        <div id="acc-exams" class="accordion-content">
+          <ul id="list-exams" class="file-list"></ul>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-header" onclick="toggleAccordion('acc-tests', this)">
+          <span>🏆 الاختبارات</span>
+          <span class="icon">🔽</span>
+        </button>
+        <div id="acc-tests" class="accordion-content">
+          <ul id="list-tests" class="file-list"></ul>
+        </div>
+      </div>
+
     </div>
 
-    <!-- 3️⃣ تبويب التحديات والألعاب -->
+    <!-- 3️⃣ الألعاب والتحديات -->
     <div id="challenges-section" class="tab-content" style="border-top: 5px solid #ab47bc; text-align: center;">
       <h2>🎮 الألعاب والتحديات التفاعلية</h2>
-      <p style="color: #666; margin-top: 15px;">قريباً... سنضيف مسابقات واختبارات تفاعلية ممتعة للتلاميذ! 🏆</p>
+      <p style="color: #666; margin-top: 15px;">قريباً... مسابقات واختبارات تفاعلية ممتعة للتلاميذ! 🏆</p>
     </div>
 
   </div>
 
   <script>
-    // التنقل بين التبويبات
     function showTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.tab-nav-btn').forEach(btn => btn.classList.remove('active'));
       
       document.getElementById(tabId).classList.add('active');
       event.currentTarget.classList.add('active');
+    }
+
+    function toggleAccordion(accId, btn) {
+      const content = document.getElementById(accId);
+      const icon = btn.querySelector('.icon');
+      
+      if (content.style.display === "block") {
+        content.style.display = "none";
+        icon.textContent = "🔽";
+      } else {
+        content.style.display = "block";
+        icon.textContent = "🔼";
+      }
     }
   </script>
   <script type="module" src="dashboard.js"></script>
