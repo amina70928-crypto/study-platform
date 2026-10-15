@@ -53,13 +53,11 @@
     }
     .tabs-nav {
       display: flex;
-      gap: 12px;
+      gap: 15px;
       margin-bottom: 25px;
-      flex-wrap: wrap;
     }
     .tab-nav-btn {
       flex: 1;
-      min-width: 180px;
       background: white;
       border: 2px solid #e8d5f2;
       padding: 14px 20px;
@@ -212,10 +210,10 @@
   </div>
 
   <div class="container">
+    <!-- تبويبين أساسيين فقط -->
     <div class="tabs-nav">
       <button class="tab-nav-btn active" onclick="showTab('live-section')">🎥 الحصص المباشرة</button>
       <button class="tab-nav-btn" onclick="showTab('lessons-section')">📚 مكتبة الدروس والملفات</button>
-      <button class="tab-nav-btn" onclick="showTab('challenges-section')">🎮 الألعاب والتحديات</button>
     </div>
 
     <!-- 1️⃣ الحصص المباشرة -->
@@ -335,12 +333,6 @@
         </div>
       </div>
 
-    </div>
-
-    <!-- 3️⃣ الألعاب والتحديات -->
-    <div id="challenges-section" class="tab-content" style="border-top: 5px solid #ab47bc; text-align: center;">
-      <h2>🎮 الألعاب والتحديات التفاعلية</h2>
-      <p style="color: #666; margin-top: 15px;">قريباً... مسابقات واختبارات تفاعلية ممتعة للتلاميذ! 🏆</p>
     </div>
 
   </div>
