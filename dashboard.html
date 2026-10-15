@@ -96,41 +96,44 @@
 <body>
 
   <div class="header">
-    <h2 id="welcome-msg">مرحباً بك في لوحة التحكم 👋</h2>
+    <h2>مرحباً بك في لوحة التحكم 👋</h2>
     <button id="logout-btn" class="logout-btn">تسجيل الخروج</button>
   </div>
 
   <div class="cards-container">
     <div class="card">
       <h3>📁 الدروس والملفات</h3>
-      <p>مشاركة وملاحظة ملفات الـ PDF والتمارين والصور.</p>
+      <p>مشاركة ومتابعة ملفات الـ PDF والتمارين والصور.</p>
       <a href="#lessons-section"><button class="card-btn">انتقال للدروس</button></a>
     </div>
 
     <div class="card">
       <h3>🎥 الحصص المباشرة</h3>
-      <p>بدء مكالمة حية أو الانضمام للحصة المباشرة.</p>
+      <p>بث مباشر عبر Google Meet وانضمام التلاميذ.</p>
       <a href="#live-section"><button class="card-btn" style="background-color: #e67e22;">الانتقال للبث المباشر</button></a>
     </div>
 
     <div class="card">
       <h3>🎮 الألعاب والتحديات</h3>
-      <p>إختبار معلومات الطلاب بأسئلة تفاعلية.</p>
+      <p>اختبار معلومات الطلاب بأسئلة تفاعلية.</p>
       <button class="card-btn">عرض التحديات</button>
     </div>
   </div>
 
-  <!-- قسم الحصص المباشرة -->
+  <!-- قسم الحصص المباشرة (Google Meet) -->
   <div id="live-section" class="section-box" style="border-top: 4px solid #e67e22;">
-    <h2>🎥 قسم الحصص المباشرة (Live)</h2>
+    <h2>🎥 قسم الحصص المباشرة (Google Meet)</h2>
 
-    <!-- تحكم الأستاذة بالبث المباشر -->
+    <!-- تحكم الأستاذة -->
     <div id="teacher-live-control" style="display: none;">
-      <p style="color: #e67e22; font-weight: bold;">[لوحة الأستاذة: يمكنك إطلاق حصة مباشرة جديدة للتلاميذ]</p>
-      <div class="file-input-box">
-        <input type="text" id="live-title-input" placeholder="عنوان الحصة المباشرة (مثال: مراجعة الفيزياء)" style="padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 4px;" />
-        <button id="start-live-btn" class="card-btn" style="background-color: #e67e22; margin-top: 0;">بدء الحصة المباشرة 🔴</button>
-        <button id="stop-live-btn" class="card-btn" style="background-color: #f44336; margin-top: 0; display: none;">إنهاء الحصة المباشرة ⬛</button>
+      <p style="color: #e67e22; font-weight: bold;">[لوحة الأستاذة: الرابط مثبت تلقائياً، يمكنك تعديل عنوان الحصة فقط عند الحاجة]</p>
+      <div class="file-input-box" style="flex-direction: column; align-items: stretch; gap: 10px;">
+        <input type="text" id="live-title-input" placeholder="عنوان الحصة (مثال: مراجعة الفيزياء والكيمياء)" value="حصة مباشرة مع الأستاذة" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;" />
+        <input type="text" id="meet-url-input" value="https://meet.google.com/rhi-fgdj-yrq" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px; background-color: #f9f9f9;" />
+        <div style="display: flex; gap: 10px;">
+          <button id="start-live-btn" class="card-btn" style="background-color: #e67e22; margin-top: 0; flex: 1;">بدء الحصة المباشرة 🔴</button>
+          <button id="stop-live-btn" class="card-btn" style="background-color: #f44336; margin-top: 0; flex: 1; display: none;">إنهاء الحصة المباشرة ⬛</button>
+        </div>
       </div>
       <span id="live-status-msg" style="font-weight: bold; margin-top: 5px; display: block;"></span>
       <hr style="margin: 20px 0; border: 0.5px solid #eee;">
@@ -139,13 +142,13 @@
     <!-- عرض حالة الحصة للتلاميذ والأستاذة -->
     <div id="live-display-area">
       <div id="no-live-msg" class="live-status-box" style="text-align: center; color: #856404;">
-        لا توجد أي حصة مباشرة شتغالة في الوقت الحالي. 📡
+        لا توجد أي حصة مباشرة شغالة في الوقت الحالي. 📡
       </div>
 
       <div id="active-live-box" class="live-status-box" style="display: none; background: #d4edda; border-color: #c3e6cb; text-align: center;">
-        <h3 style="color: #155724; margin-top: 0;" id="current-live-title">🔴 هناك حصة مباشرة شتغالة الان!</h3>
-        <p style="color: #155724;">اضغط على الزر أدناه للانضمام والتفاعل المباشر مع الأستاذة:</p>
-        <a id="join-live-btn" href="#" target="_blank" style="background: #28a745; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; display: inline-block;">الانضمام للحصة المباشرة 🎙️</a>
+        <h3 style="color: #155724; margin-top: 0;" id="current-live-title">🔴 هناك حصة مباشرة عبر Google Meet الآن!</h3>
+        <p style="color: #155724;">اضغط على الزر أدناه للانضمام إلى اجتماع Google Meet:</p>
+        <a id="join-live-btn" href="https://meet.google.com/rhi-fgdj-yrq" target="_blank" style="background: #0F9D58; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; display: inline-block;">الانضمام إلى Google Meet 🎙️</a>
       </div>
     </div>
   </div>

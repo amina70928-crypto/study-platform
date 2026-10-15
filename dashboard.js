@@ -20,6 +20,7 @@ setPersistence(auth, browserSessionPersistence).catch((error) => {
 });
 
 const TEACHER_EMAIL = "amina26928@gmail.com";
+const DEFAULT_MEET_URL = "https://meet.google.com/rhi-fgdj-yrq";
 
 const logoutBtn = document.getElementById("logout-btn");
 const teacherUploadSection = document.getElementById("teacher-upload-section");
@@ -46,11 +47,16 @@ function listenToLiveStatus() {
   onSnapshot(doc(db, "live_stream", "current_session"), (snapshot) => {
     if (snapshot.exists()) {
       const data = snapshot.data();
+
+      if (meetUrlInput) {
+        meetUrlInput.value = data.url || DEFAULT_MEET_URL;
+      }
+
       if (data.isLive) {
         if (noLiveMsg) noLiveMsg.style.display = "none";
         if (activeLiveBox) activeLiveBox.style.display = "block";
-        if (currentLiveTitle) currentLiveTitle.textContent = `🔴 حصة Google Meet: ${data.title}`;
-        if (joinLiveBtn) joinLiveBtn.href = data.url;
+        if (currentLiveTitle) currentLiveTitle.textContent = `🔴 حصة Google Meet: ${data.title || 'حصة مباشرة مع الأستاذة'}`;
+        if (joinLiveBtn) joinLiveBtn.href = data.url || DEFAULT_MEET_URL;
 
         if (startLiveBtn && stopLiveBtn) {
           startLiveBtn.style.display = "none";
@@ -72,19 +78,11 @@ function listenToLiveStatus() {
   });
 }
 
-// بدء الحصة برابط Google Meet
+// بدء الحصة المباشرة بالرابط الثابت
 if (startLiveBtn) {
   startLiveBtn.addEventListener("click", async () => {
-    const title = liveTitleInput.value.trim() || "حصة مباشرة مع الأستاذة";
-    const meetUrl = meetUrlInput.value.trim();
-
-    if (!meetUrl || !meetUrl.includes("meet.google.com")) {
-      if (liveStatusMsg) {
-        liveStatusMsg.style.color = "red";
-        liveStatusMsg.textContent = "يرجى وضع رابط Google Meet صحيح! ⚠️";
-      }
-      return;
-    }
+    const title = (liveTitleInput && liveTitleInput.value.trim()) ? liveTitleInput.value.trim() : "حصة مباشرة مع الأستاذة";
+    const meetUrl = (meetUrlInput && meetUrlInput.value.trim()) ? meetUrlInput.value.trim() : DEFAULT_MEET_URL;
 
     try {
       await setDoc(doc(db, "live_stream", "current_session"), {
@@ -96,10 +94,8 @@ if (startLiveBtn) {
 
       if (liveStatusMsg) {
         liveStatusMsg.style.color = "green";
-        liveStatusMsg.textContent = "تم تفعيل بث Google Meet بنجاح! 🔴";
+        liveStatusMsg.textContent = "تم إطلاق الحصة المباشرة بنجاح! 🔴";
       }
-      meetUrlInput.value = "";
-      liveTitleInput.value = "";
 
     } catch (err) {
       console.error("خطأ في بدء الحصة:", err);
@@ -111,14 +107,17 @@ if (startLiveBtn) {
   });
 }
 
-// إنهاء الحصة المباشرة
+// إنهاء الحصة المباشرة مع الحفاظ على الرابط دائمًا
 if (stopLiveBtn) {
   stopLiveBtn.addEventListener("click", async () => {
     try {
+      const currentTitle = (liveTitleInput && liveTitleInput.value.trim()) ? liveTitleInput.value.trim() : "حصة مباشرة مع الأستاذة";
+      const currentUrl = (meetUrlInput && meetUrlInput.value.trim()) ? meetUrlInput.value.trim() : DEFAULT_MEET_URL;
+
       await setDoc(doc(db, "live_stream", "current_session"), {
         isLive: false,
-        title: "",
-        url: ""
+        title: currentTitle,
+        url: currentUrl
       });
 
       if (liveStatusMsg) {
