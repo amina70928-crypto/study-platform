@@ -1,72 +1,106 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>منصة التعليم - تسجيل الدخول</title>
-    <style>
-        body { font-family: Tahoma, sans-serif; background: #f4f4f9; padding: 50px; text-align: center; }
-        .box { background: white; padding: 25px; border-radius: 8px; display: inline-block; width: 320px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
-        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
-        button { background: #4CAF50; color: white; border: none; padding: 10px 15px; width: 100%; border-radius: 4px; cursor: pointer; font-size: 16px; }
-        button:hover { background: #45a049; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة التعليم - تسجيل الدخول</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+    .auth-container {
+      background-color: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    .auth-box h2 {
+      margin-top: 0;
+      color: #333;
+      text-align: center;
+      font-size: 20px;
+    }
+    .input-group {
+      margin-bottom: 15px;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    .auth-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .auth-btn:hover {
+      background-color: #45a049;
+    }
+    .error-msg {
+      color: red;
+      font-size: 14px;
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+    hr {
+      margin: 25px 0;
+      border: 0;
+      border-top: 1px solid #eee;
+    }
+  </style>
 </head>
 <body>
-<!-- مكان ظهور الرسائل الحمراء -->
-<p id="error-message" style="color: red; font-weight: bold; margin-top: 10px; display: none;"></p>
-<div class="box">
-    <h2>تسجيل حساب جديد</h2>
-    <input type="email" id="signup-email" placeholder="البريد الإلكتروني">
-    <input type="password" id="signup-password" placeholder="كلمة المرور">
-    <button id="signup-btn">تسجيل حساب</button>
 
-    <hr style="margin: 20px 0;">
+  <div class="auth-container">
+    <!-- تسجيل حساب جديد -->
+    <div class="auth-box">
+      <h2>تسجيل حساب جديد</h2>
+      <div class="input-group">
+        <input type="email" id="signup-email" placeholder="البريد الإلكتروني" required>
+      </div>
+      <div class="input-group">
+        <input type="password" id="signup-password" placeholder="كلمة المرور" required>
+      </div>
+      <button id="signup-btn" class="auth-btn">تسجيل حساب</button>
+    </div>
 
-    <h2>تسجيل الدخول</h2>
-    <input type="email" id="signin-email" placeholder="البريد الإلكتروني">
-    <input type="password" id="signin-password" placeholder="كلمة المرور">
-    <button id="login-btn">دخول للمنصة</button>
-</div>
+    <hr>
 
-<!-- ربط ملف JavaScript -->
-<script type="module" src="app.js"></script>
+    <!-- تسجيل الدخول -->
+    <div class="auth-box">
+      <h2>تسجيل الدخول</h2>
+      <div class="input-group">
+        <input type="email" id="login-email" placeholder="البريد الإلكتروني" required>
+      </div>
+      <div class="input-group">
+        <input type="password" id="login-password" placeholder="كلمة المرور" required>
+      </div>
+      <button id="login-btn" class="auth-btn">دخول المنصة</button>
+    </div>
 
+    <div id="error-message" class="error-msg"></div>
+  </div>
+
+  <script type="module" src="app.js"></script>
 </body>
-=======
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>منصة التعليم - تسجيل الدخول</title>
-    <style>
-        body { font-family: Tahoma, sans-serif; background: #f4f4f9; padding: 50px; text-align: center; }
-        .box { background: white; padding: 25px; border-radius: 8px; display: inline-block; width: 320px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
-        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
-        button { background: #4CAF50; color: white; border: none; padding: 10px 15px; width: 100%; border-radius: 4px; cursor: pointer; font-size: 16px; }
-        button:hover { background: #45a049; }
-    </style>
-</head>
-<body>
-<!-- مكان ظهور الرسائل الحمراء -->
-<p id="error-message" style="color: red; font-weight: bold; margin-top: 10px; display: none;"></p>
-<div class="box">
-    <h2>تسجيل حساب جديد</h2>
-    <input type="email" id="signup-email" placeholder="البريد الإلكتروني">
-    <input type="password" id="signup-password" placeholder="كلمة المرور">
-    <button id="signup-btn">تسجيل حساب</button>
-
-    <hr style="margin: 20px 0;">
-
-    <h2>تسجيل الدخول</h2>
-    <input type="email" id="signin-email" placeholder="البريد الإلكتروني">
-    <input type="password" id="signin-password" placeholder="كلمة المرور">
-    <button id="login-btn">دخول للمنصة</button>
-</div>
-
-<!-- ربط ملف JavaScript -->
-<script type="module" src="app.js"></script>
-
-</body>
->>>>>>> f2651a85ad0af41289779e86734b4736300bb685
 </html>
