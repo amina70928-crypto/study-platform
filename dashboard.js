@@ -46,18 +46,18 @@ function listenToLiveStatus() {
     if (snapshot.exists()) {
       const data = snapshot.data();
       if (data.isLive) {
-        noLiveMsg.style.display = "none";
-        activeLiveBox.style.display = "block";
-        currentLiveTitle.textContent = `🔴 بث مباشر حالياً: ${data.title}`;
-        joinLiveBtn.href = data.url;
+        if (noLiveMsg) noLiveMsg.style.display = "none";
+        if (activeLiveBox) activeLiveBox.style.display = "block";
+        if (currentLiveTitle) currentLiveTitle.textContent = `🔴 بث مباشر حالياً: ${data.title}`;
+        if (joinLiveBtn) joinLiveBtn.href = data.url;
 
         if (startLiveBtn && stopLiveBtn) {
           startLiveBtn.style.display = "none";
           stopLiveBtn.style.display = "inline-block";
         }
       } else {
-        noLiveMsg.style.display = "block";
-        activeLiveBox.style.display = "none";
+        if (noLiveMsg) noLiveMsg.style.display = "block";
+        if (activeLiveBox) activeLiveBox.style.display = "none";
 
         if (startLiveBtn && stopLiveBtn) {
           startLiveBtn.style.display = "inline-block";
@@ -65,8 +65,8 @@ function listenToLiveStatus() {
         }
       }
     } else {
-      noLiveMsg.style.display = "block";
-      activeLiveBox.style.display = "none";
+      if (noLiveMsg) noLiveMsg.style.display = "block";
+      if (activeLiveBox) activeLiveBox.style.display = "none";
     }
   });
 }
@@ -123,7 +123,7 @@ if (stopLiveBtn) {
   });
 }
 
-// جلب وعرض كل الملفات من قاعدة البيانات
+// جلب وعرض كل الملفات مع زرين منفصلين (عرض + تحميل)
 async function loadFiles(isTeacher) {
   if (!fileList) return;
   fileList.innerHTML = "<p style='color: #666; text-align: center;'>جاري تحميل الملفات من السحابة...</p>";

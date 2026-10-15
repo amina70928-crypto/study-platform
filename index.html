@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -32,4 +33,40 @@
 <script type="module" src="app.js"></script>
 
 </body>
+=======
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>منصة التعليم - تسجيل الدخول</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background: #f4f4f9; padding: 50px; text-align: center; }
+        .box { background: white; padding: 25px; border-radius: 8px; display: inline-block; width: 320px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
+        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #4CAF50; color: white; border: none; padding: 10px 15px; width: 100%; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #45a049; }
+    </style>
+</head>
+<body>
+<!-- مكان ظهور الرسائل الحمراء -->
+<p id="error-message" style="color: red; font-weight: bold; margin-top: 10px; display: none;"></p>
+<div class="box">
+    <h2>تسجيل حساب جديد</h2>
+    <input type="email" id="signup-email" placeholder="البريد الإلكتروني">
+    <input type="password" id="signup-password" placeholder="كلمة المرور">
+    <button id="signup-btn">تسجيل حساب</button>
+
+    <hr style="margin: 20px 0;">
+
+    <h2>تسجيل الدخول</h2>
+    <input type="email" id="signin-email" placeholder="البريد الإلكتروني">
+    <input type="password" id="signin-password" placeholder="كلمة المرور">
+    <button id="login-btn">دخول للمنصة</button>
+</div>
+
+<!-- ربط ملف JavaScript -->
+<script type="module" src="app.js"></script>
+
+</body>
+>>>>>>> f2651a85ad0af41289779e86734b4736300bb685
 </html>
