@@ -144,22 +144,22 @@
       border-color: #a5d6a7;
     }
 
-    /* أزرار الأكورديون المنسدلة */
-    .accordion-item {
-      margin-top: 15px;
-      border: 1px solid #e8d5f2;
-      border-radius: 12px;
+    /* الأكورديون الرئيسي (الفصول) */
+    .term-accordion {
+      margin-top: 18px;
+      border: 2px solid #e8d5f2;
+      border-radius: 14px;
       background: #fcf9fd;
+      overflow: hidden;
     }
-    .accordion-header {
+    .term-header {
       width: 100%;
-      background: #f0e6f5;
-      color: #4a148c;
-      padding: 15px 20px;
-      font-size: 16px;
+      background: linear-gradient(135deg, #f0e6f5, #e1bee7);
+      color: #3b1443;
+      padding: 16px 22px;
+      font-size: 18px;
       font-weight: 800;
       border: none;
-      border-radius: 12px;
       text-align: right;
       cursor: pointer;
       display: flex;
@@ -167,17 +167,49 @@
       align-items: center;
       transition: background 0.3s;
     }
-    .accordion-header:hover {
-      background: #e1bee7;
+    .term-header:hover {
+      background: #ce93d8;
+      color: white;
     }
-    .accordion-content {
+    .term-content {
       display: none;
       padding: 15px 20px;
       background: white;
       border-top: 1px solid #e8d5f2;
-      border-bottom-left-radius: 12px;
-      border-bottom-right-radius: 12px;
     }
+
+    /* الأكورديون الفرعي (الدروس / الفروض / الاختبارات) */
+    .sub-accordion {
+      margin-top: 10px;
+      border: 1px solid #f0e6f5;
+      border-radius: 10px;
+      background: #faf5fc;
+    }
+    .sub-header {
+      width: 100%;
+      background: #f8effb;
+      color: #6a1b9a;
+      padding: 12px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      text-align: right;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sub-header:hover {
+      background: #f0e6f5;
+    }
+    .sub-content {
+      display: none;
+      padding: 12px 15px;
+      background: white;
+      border-top: 1px solid #f0e6f5;
+    }
+
     .file-list {
       list-style: none;
       padding: 0;
@@ -188,7 +220,7 @@
       justify-content: space-between;
       align-items: center;
       background: #faf5fc;
-      padding: 12px 16px;
+      padding: 10px 14px;
       margin-bottom: 8px;
       border-radius: 8px;
       border: 1px solid #f0e6f5;
@@ -210,7 +242,6 @@
   </div>
 
   <div class="container">
-    <!-- تبويبين أساسيين فقط -->
     <div class="tabs-nav">
       <button class="tab-nav-btn active" onclick="showTab('live-section')">🎥 الحصص المباشرة</button>
       <button class="tab-nav-btn" onclick="showTab('lessons-section')">📚 مكتبة الدروس والملفات</button>
@@ -247,89 +278,149 @@
       </div>
     </div>
 
-    <!-- 2️⃣ مكتبة الدروس والملفات -->
+    <!-- 2️⃣ مكتبة الدروس والملفات (منظمة بالفصول ثم التفاصيل) -->
     <div id="lessons-section" class="tab-content" style="border-top: 5px solid #4a148c;">
       <h2>📚 مكتبة الدروس والملفات التعليمية</h2>
       
       <div id="teacher-upload-section" style="display: none; margin-top: 15px; margin-bottom: 25px; background: #faf5fc; padding: 20px; border-radius: 14px; border: 1px solid #e8d5f2;">
-        <p style="color: #2e7d32; font-weight: bold; margin-top:0;">[لوحة الأستاذة: اختر تصنيف الملف ثم ارفعه]</p>
+        <p style="color: #2e7d32; font-weight: bold; margin-top:0;">[لوحة الأستاذة: حددي الفصل ثم نوع الملف واضغطي رفع]</p>
         <div style="display: flex; flex-direction: column; gap: 12px;">
-          <select id="file-category-select">
-            <option value="lessons">📖 الدروس والشروحات</option>
-            <option value="term1">📂 الفصل الأول</option>
-            <option value="term2">📂 الفصل الثاني</option>
-            <option value="term3">📂 الفصل الثالث</option>
-            <option value="exams">📝 الفروض</option>
-            <option value="tests">🏆 الاختبارات</option>
-          </select>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <select id="file-term-select" style="flex: 1; min-width: 140px;">
+              <option value="term1">📂 الفصل الأول</option>
+              <option value="term2">📂 الفصل الثاني</option>
+              <option value="term3">📂 الفصل الثالث</option>
+            </select>
+            <select id="file-type-select" style="flex: 1; min-width: 140px;">
+              <option value="lessons">📖 الدروس والشروحات</option>
+              <option value="exams">📝 الفروض</option>
+              <option value="tests">🏆 الاختبارات</option>
+            </select>
+          </div>
           <input type="file" id="any-file-uploader" style="padding: 8px; background: white; border-radius: 8px; border: 1px solid #e1bee7;" />
-          <button id="upload-btn" class="card-btn" style="background: #2e7d32;">رفع الملف إلى التصنيف المختار 📤</button>
+          <button id="upload-btn" class="card-btn" style="background: #2e7d32;">رفع الملف إلى الخيار المختار 📤</button>
           <span id="upload-status" style="font-weight: bold; color: #6a1b9a;"></span>
         </div>
       </div>
 
       <div id="student-view-msg" style="display: none; margin-top: 15px;">
-        <p style="color: #666;">اضغط على القسم للعرّض والاطلاع على الملفات المندرجة تحته:</p>
+        <p style="color: #666;">اختر الفصل أولاً ثم تصفح الدروس، الفروض، والاختبارات المندرجة تحته:</p>
       </div>
 
-      <!-- القوائم المنسدلة -->
-      <div class="accordion-item">
-        <button class="accordion-header" onclick="toggleAccordion('acc-lessons', this)">
-          <span>📖 الدروس والشروحات</span>
-          <span class="icon">🔽</span>
-        </button>
-        <div id="acc-lessons" class="accordion-content">
-          <ul id="list-lessons" class="file-list"></ul>
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <button class="accordion-header" onclick="toggleAccordion('acc-term1', this)">
+      <!-- 📂 الفصل الأول -->
+      <div class="term-accordion">
+        <button class="term-header" onclick="toggleAccordion('content-term1', this)">
           <span>📂 الفصل الأول</span>
           <span class="icon">🔽</span>
         </button>
-        <div id="acc-term1" class="accordion-content">
-          <ul id="list-term1" class="file-list"></ul>
+        <div id="content-term1" class="term-content">
+          <div class="sub-accordion">
+            <button class="sub-header" onclick="toggleAccordion('term1-lessons', this)">
+              <span>📖 الدروس والشروحات</span>
+              <span class="icon">🔽</span>
+            </button>
+            <div id="term1-lessons" class="sub-content">
+              <ul id="list-term1-lessons" class="file-list"></ul>
+            </div>
+          </div>
+
+          <div class="sub-accordion">
+            <button class="sub-header" onclick="toggleAccordion('term1-exams', this)">
+              <span>📝 الفروض</span>
+              <span class="icon">🔽</span>
+            </button>
+            <div id="term1-exams" class="sub-content">
+              <ul id="list-term1-exams" class="file-list"></ul>
+            </div>
+          </div>
+
+          <div class="sub-accordion">
+            <button class="sub-header" onclick="toggleAccordion('term1-tests', this)">
+              <span>🏆 الاختبارات</span>
+              <span class="icon">🔽</span>
+            </button>
+            <div id="term1-tests" class="sub-content">
+              <ul id="list-term1-tests" class="file-list"></ul>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="accordion-item">
-        <button class="accordion-header" onclick="toggleAccordion('acc-term2', this)">
+      <!-- 📂 الفصل الثاني -->
+      <div class="term-accordion">
+        <button class="term-header" onclick="toggleAccordion('content-term2', this)">
           <span>📂 الفصل الثاني</span>
           <span class="icon">🔽</span>
         </button>
-        <div id="acc-term2" class="accordion-content">
-          <ul id="list-term2" class="file-list"></ul>
+        <div id="content-term2" class="term-content">
+          <div class="sub-accordion">
+            <button class="sub-header" onclick="toggleAccordion('term2-lessons', this)">
+              <span>📖 الدروس والشروحات</span>
+              <span class="icon">🔽</span>
+            </button>
+            <div id="term2-lessons" class="sub-content">
+              <ul id="list-term2-lessons" class="file-list"></ul>
+            </div>
+          </div>
+
+          <div class="sub-accordion">
+            <button class="sub-header" onclick="toggleAccordion('term2-exams', this)">
+              <span>📝 الفروض</span>
+              <span class="icon">🔽</span>
+            </button>
+            <div id="term2-exams" class="sub-content">
+              <ul id="list-term2-exams" class="file-list"></ul>
+            </div>
+          </div>
+
+          <div class="sub-accordion">
+            <button class="sub-header" onclick="toggleAccordion('term2-tests', this)">
+              <span>🏆 الاختبارات</span>
+              <span class="icon">🔽</span>
+            </button>
+            <div id="term2-tests" class="sub-content">
+              <ul id="list-term2-tests" class="file-list"></ul>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="accordion-item">
-        <button class="accordion-header" onclick="toggleAccordion('acc-term3', this)">
+      <!-- 📂 الفصل الثالث -->
+      <div class="term-accordion">
+        <button class="term-header" onclick="toggleAccordion('content-term3', this)">
           <span>📂 الفصل الثالث</span>
           <span class="icon">🔽</span>
         </button>
-        <div id="acc-term3" class="accordion-content">
-          <ul id="list-term3" class="file-list"></ul>
-        </div>
-      </div>
+        <div id="content-term3" class="term-content">
+          <div class="sub-accordion">
+            <button class="sub-header" onclick="toggleAccordion('term3-lessons', this)">
+              <span>📖 الدروس والشروحات</span>
+              <span class="icon">🔽</span>
+            </button>
+            <div id="term3-lessons" class="sub-content">
+              <ul id="list-term3-lessons" class="file-list"></ul>
+            </div>
+          </div>
 
-      <div class="accordion-item">
-        <button class="accordion-header" onclick="toggleAccordion('acc-exams', this)">
-          <span>📝 الفروض</span>
-          <span class="icon">🔽</span>
-        </button>
-        <div id="acc-exams" class="accordion-content">
-          <ul id="list-exams" class="file-list"></ul>
-        </div>
-      </div>
+          <div class="sub-accordion">
+            <button class="sub-header" onclick="toggleAccordion('term3-exams', this)">
+              <span>📝 الفروض</span>
+              <span class="icon">🔽</span>
+            </button>
+            <div id="term3-exams" class="sub-content">
+              <ul id="list-term3-exams" class="file-list"></ul>
+            </div>
+          </div>
 
-      <div class="accordion-item">
-        <button class="accordion-header" onclick="toggleAccordion('acc-tests', this)">
-          <span>🏆 الاختبارات</span>
-          <span class="icon">🔽</span>
-        </button>
-        <div id="acc-tests" class="accordion-content">
-          <ul id="list-tests" class="file-list"></ul>
+          <div class="sub-accordion">
+            <button class="sub-header" onclick="toggleAccordion('term3-tests', this)">
+              <span>🏆 الاختبارات</span>
+              <span class="icon">🔽</span>
+            </button>
+            <div id="term3-tests" class="sub-content">
+              <ul id="list-term3-tests" class="file-list"></ul>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -352,10 +443,10 @@
       
       if (content.style.display === "block") {
         content.style.display = "none";
-        icon.textContent = "🔽";
+        if(icon) icon.textContent = "🔽";
       } else {
         content.style.display = "block";
-        icon.textContent = "🔼";
+        if(icon) icon.textContent = "🔼";
       }
     }
   </script>

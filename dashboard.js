@@ -27,7 +27,8 @@ const teacherUploadSection = document.getElementById("teacher-upload-section");
 const studentViewMsg = document.getElementById("student-view-msg");
 const uploadBtn = document.getElementById("upload-btn");
 const anyFileUploader = document.getElementById("any-file-uploader");
-const fileCategorySelect = document.getElementById("file-category-select");
+const fileTermSelect = document.getElementById("file-term-select");
+const fileTypeSelect = document.getElementById("file-type-select");
 const uploadStatus = document.getElementById("upload-status");
 
 // عناصر الحصص المباشرة
@@ -120,29 +121,30 @@ if (stopLiveBtn) {
   });
 }
 
-// جلب وعرض الملفات
+// جلب وعرض الملفات في أقسامها المحددة
 async function loadFiles(isTeacher) {
-  const categories = ["lessons", "term1", "term2", "term3", "exams", "tests"];
+  const terms = ["term1", "term2", "term3"];
+  const types = ["lessons", "exams", "tests"];
   
-  categories.forEach(cat => {
-    const listEl = document.getElementById(`list-${cat}`);
-    if (listEl) listEl.innerHTML = "<p style='color: #888; font-size:13px; margin:5px 0;'>جاري التحميل...</p>";
+  // تصفير القوائم أولاً
+  terms.forEach(t => {
+    types.forEach(p => {
+      const listEl = document.getElementById(`list-${t}-${p}`);
+      if (listEl) listEl.innerHTML = "";
+    });
   });
 
   try {
     const querySnapshot = await getDocs(collection(db, "all_files"));
-    
-    categories.forEach(cat => {
-      const listEl = document.getElementById(`list-${cat}`);
-      if (listEl) listEl.innerHTML = "";
-    });
 
     querySnapshot.forEach((docSnap) => {
       const fileData = docSnap.data();
       const docId = docSnap.id;
-      const category = fileData.category || "lessons";
+      
+      const term = fileData.term || "term1";
+      const type = fileData.type || "lessons";
 
-      const listEl = document.getElementById(`list-${category}`);
+      const listEl = document.getElementById(`list-${term}-${type}`);
       if (!listEl) return;
 
       const li = document.createElement("li");
@@ -203,11 +205,14 @@ async function loadFiles(isTeacher) {
       listEl.appendChild(li);
     });
 
-    categories.forEach(cat => {
-      const listEl = document.getElementById(`list-${cat}`);
-      if (listEl && listEl.children.length === 0) {
-        listEl.innerHTML = "<p style='color: #888; font-size: 13px; margin: 5px 0;'>لا توجد ملفات في هذا القسم حالياً.</p>";
-      }
+    // إظهار رسالة إذا كان القسم فارغاً
+    terms.forEach(t => {
+      types.forEach(p => {
+        const listEl = document.getElementById(`list-${t}-${p}`);
+        if (listEl && listEl.children.length === 0) {
+          listEl.innerHTML = "<p style='color: #888; font-size: 13px; margin: 5px 0;'>لا توجد ملفات حالياً.</p>";
+        }
+      });
     });
 
   } catch (error) {
@@ -261,7 +266,8 @@ if (uploadBtn) {
     }
 
     const file = anyFileUploader.files[0];
-    const category = fileCategorySelect.value;
+    const term = fileTermSelect.value;
+    const type = fileTypeSelect.value;
 
     if (!file) {
       if (uploadStatus) {
@@ -282,7 +288,8 @@ if (uploadBtn) {
       try {
         await addDoc(collection(db, "all_files"), {
           name: file.name,
-          category: category,
+          term: term,
+          type: type,
           url: reader.result,
           createdAt: new Date()
         });
